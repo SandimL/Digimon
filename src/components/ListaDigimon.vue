@@ -1,5 +1,11 @@
 <template>
   <v-container>
+        <v-img
+          :src="require('../assets/logo.png')"
+          class="my-3"
+          contain
+          height="200"
+        />
         <div>
             <v-text-field type="text" class="ma-15" label="Buscar Digimon por nome" v-model="busca" /> 
         </div>
@@ -9,7 +15,6 @@
             :size="80"
             color="#3C096C"/>
         </v-row>
- 
         <v-card dark v-for="digimon in DigimonsFiltrados" v-bind:key="digimon" class="ma-5"
          v-bind:style="{ backgroundColor: selecionaCor(digimon.level)}">
             <div class="d-flex flex-no-wrap justify-space-between" >
@@ -37,7 +42,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
     },
     data: () => ({
         busca: '',
-        carregando: false,
+        carregando: true,
         digimons: [],
         colorByLevels: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
     }),
@@ -46,7 +51,6 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
     },
     methods:{
         requisicaoDigimons: function(){
-            this.carregando = true
             axios
             .get('https://digimon-api.herokuapp.com/api/digimon')
             .then(response => {
