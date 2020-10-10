@@ -15,7 +15,7 @@
             :size="80"
             color="#3C096C"/>
         </v-row>
-        <v-card dark v-for="digimon in DigimonsFiltrados" v-bind:key="digimon" class="ma-5"
+        <v-card dark v-for="digimon in DigimonsFiltrados" v-bind:key="digimon.name" class="ma-5"
          v-bind:style="{ backgroundColor: selecionaCor(digimon.level)}">
             <div class="d-flex flex-no-wrap justify-space-between" >
                 <div>
@@ -44,6 +44,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         busca: '',
         carregando: true,
         digimons: [],
+        temporizador: null,
         colorByLevels: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
     }),
     mounted () {
@@ -64,15 +65,37 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         },
         selecionaCor: function(level){
             return this.colorByLevels[level]
+        }, 
+        filterByName: function(){
+            console.log("filterByNamefilterByNamefilterByName")
+            clearTimeout(this.temporizador);
+            var digimonsLocal = []
+            this.temporizador = setTimeout(
+                () => {
+                    digimonsLocal = this.digimons.filter(
+                        digimon => {
+                            console.log(digimon)
+                            digimon.name.toLowerCase().includes(this.busca.toLowerCase())
+                        }
+                    )
+                }, 500
+            )
+            console.log(digimonsLocal)
+            return (digimonsLocal.length < 1) ? this.digimons : digimonsLocal
         }
     },
     computed: {
+        // DigimonsFiltrados() {
+        //     //this.carregando = true
+        //     return this.digimons.filter(digimon => {
+        //         //this.carregando = false
+        //         return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
+        //     })
+        // }
         DigimonsFiltrados() {
-            this.carregando = true
-            return this.digimons.filter(digimon => {
-                this.carregando = false
-                return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
-            })
+            this.busca = this.busca
+            console.log("DigimonsFiltradosDigimonsFiltrados")
+           return this.filterByName()
         }
     }
   }
