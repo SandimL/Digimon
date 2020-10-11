@@ -45,7 +45,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         carregando: true,
         digimons: [],
         temporizador: null,
-        colorByLevels: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
+        colorPorNivel: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
     }),
     mounted () {
         this.requisicaoDigimons();
@@ -64,7 +64,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
             })
         },
         selecionaCor: function(level){
-            return this.colorByLevels[level]
+            return this.colorPorNivel[level]
         }, 
         filterByName: function(){
             console.log("filterByNamefilterByNamefilterByName")
@@ -74,8 +74,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
                 () => {
                     digimonsLocal = this.digimons.filter(
                         digimon => {
-                            console.log(digimon)
-                            digimon.name.toLowerCase().includes(this.busca.toLowerCase())
+                            return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
                         }
                     )
                 }, 500
@@ -85,17 +84,10 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         }
     },
     computed: {
-        // DigimonsFiltrados() {
-        //     //this.carregando = true
-        //     return this.digimons.filter(digimon => {
-        //         //this.carregando = false
-        //         return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
-        //     })
-        // }
         DigimonsFiltrados() {
             this.busca = this.busca
             console.log("DigimonsFiltradosDigimonsFiltrados")
-           return this.filterByName()
+            return this.filterByName()
         }
     }
   }
