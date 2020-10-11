@@ -44,6 +44,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         busca: '',
         carregando: true,
         digimons: [],
+        digimonsLocal: [],
         temporizador: null,
         colorPorNivel: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
     }),
@@ -67,26 +68,28 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
             return this.colorPorNivel[level]
         }, 
         filterByName: function(){
-            console.log("filterByNamefilterByNamefilterByName")
+            //console.log("filterByNamefilterByNamefilterByName")
             clearTimeout(this.temporizador);
-            var digimonsLocal = []
+            //var digimonsLocal = []
             this.temporizador = setTimeout(
                 () => {
-                    digimonsLocal = this.digimons.filter(
+                    this.digimonsLocal = this.digimons.filter(
                         digimon => {
+                            //console.log(this.digimons)
+                            //console.log(this.digimonsLocal)
                             return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
                         }
                     )
-                }, 500
+                }, 300
             )
-            console.log(digimonsLocal)
-            return (digimonsLocal.length < 1) ? this.digimons : digimonsLocal
+            //console.log(digimonsLocal)
+            return (this.digimonsLocal.length < 1) ? this.digimons : this.digimonsLocal
         }
     },
     computed: {
         DigimonsFiltrados() {
             this.busca = this.busca
-            console.log("DigimonsFiltradosDigimonsFiltrados")
+            //console.log("DigimonsFiltradosDigimonsFiltrados")
             return this.filterByName()
         }
     }
