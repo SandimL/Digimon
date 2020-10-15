@@ -7,7 +7,6 @@
           height="200"
         />
         <div>
-            <!-- <v-text-field type="text" class="ma-15" label="Buscar Digimon por nome" @input="filtroPorNome" /> -->
             <v-text-field type="text" class="ma-15" label="Buscar Digimon por nome" v-model="busca" /> 
         </div>
         <v-row v-show="carregando" style="justify-content: center" class="ma-15">
@@ -16,7 +15,7 @@
             :size="80"
             color="#3C096C"/>
         </v-row>
-        <v-card dark v-for="digimon in filtrados" v-bind:key="digimon.name" class="ma-5"
+        <v-card dark v-for="digimon in digimonsFiltrados" v-bind:key="digimon.name" class="ma-5"
          v-bind:style="{ backgroundColor: selecionaCor(digimon.level)}">
             <div class="d-flex flex-no-wrap justify-space-between" >
                 <div>
@@ -45,8 +44,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         busca: '',
         carregando: true,
         digimons: [],
-        //digimonsLocal: [],
-        //digimonsFiltrados: [],
+        digimonsLocal: [],
         temporizador: null,
         colorPorNivel: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
     }),
@@ -68,40 +66,25 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         },
         selecionaCor: function(level){
             return this.colorPorNivel[level]
+        }, 
+        filtroPorNome: function(){
+            clearTimeout(this.temporizador);
+            this.temporizador = setTimeout(
+                () => {
+                    this.digimonsLocal = this.digimons.filter(
+                        digimon => {
+                            return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
+                        }
+                    )
+                }, 300
+            )
+            return (this.digimonsLocal.length < 1) ? this.digimons : this.digimonsLocal
         }
-        // , 
-        // filtroPorNome: function(digitado){
-        //     //console.log("filtroPorNomefiltroPorNomefiltroPorNome")
-        //     clearTimeout(this.temporizador);
-        //     let digimonsLocal = []
-        //     this.temporizador = setTimeout(
-        //         () => {
-        //             digimonsLocal = this.digimons.filter(
-        //                 digimon => {
-        //                     //console.log(this.digimons)
-        //                     //console.log(this.digimonsLocal)
-        //                     //return digimon.name.toLowerCase().includes(digitado.toLowerCase())
-        //                     return digimon.name.toLowerCase().match(digitado.toLowerCase())
-        //                 }
-        //             )
-        //         }, 300
-        //     )
-        //     //console.log(digimonsLocal)
-        //     return (digimonsLocal.length < 1) ? this.digimons : digimonsLocal
-        // }
-    }
-    ,
+    },
     computed: {
-        // digimonsFiltrados() {
-        //     this.busca = this.busca
-        //     //console.log("digimonsFiltradosdigimonsFiltrados")
-        //     return this.filtroPorNome()
-        // },
-        filtrados() {
-            console.log("debug de javeiroScript")
-            return this.digimons.filter(d=>{
-                return d.name.match(this.busca)
-            })
+        digimonsFiltrados() {
+            this.busca = this.busca//para o computed monitorar o campo this.busca
+            return this.filtroPorNome()
         }
     }
   }
