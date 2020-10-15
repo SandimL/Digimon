@@ -15,7 +15,7 @@
             :size="80"
             color="#3C096C"/>
         </v-row>
-        <v-card dark v-for="digimon in DigimonsFiltrados" v-bind:key="digimon" class="ma-5"
+        <v-card dark v-for="digimon in digimonsFiltrados" v-bind:key="digimon.name" class="ma-5"
          v-bind:style="{ backgroundColor: selecionaCor(digimon.level)}">
             <div class="d-flex flex-no-wrap justify-space-between" >
                 <div>
@@ -44,7 +44,9 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
         busca: '',
         carregando: true,
         digimons: [],
-        colorByLevels: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
+        digimonsLocal: [],
+        temporizador: null,
+        colorPorNivel: {'In Training': '#E0AAFF', 'Training': '#C77DFF', 'Rookie': '#9D4EDD', 'Champion': '#7B2CBF', 'Ultimate': '#5A189A', 'Fresh': '#3C096C', 'Mega': '#240046', 'Armor': '#10002B'}
     }),
     mounted () {
         this.requisicaoDigimons();
@@ -63,16 +65,26 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
             })
         },
         selecionaCor: function(level){
-            return this.colorByLevels[level]
+            return this.colorPorNivel[level]
+        }, 
+        filtroPorNome: function(){
+            clearTimeout(this.temporizador);
+            this.temporizador = setTimeout(
+                () => {
+                    this.digimonsLocal = this.digimons.filter(
+                        digimon => {
+                            return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
+                        }
+                    )
+                }, 300
+            )
+            return (this.digimonsLocal.length < 1) ? this.digimons : this.digimonsLocal
         }
     },
     computed: {
-        DigimonsFiltrados() {
-            this.carregando = true
-            return this.digimons.filter(digimon => {
-                this.carregando = false
-                return digimon.name.toLowerCase().includes(this.busca.toLowerCase())
-            })
+        digimonsFiltrados() {
+            this.busca = this.busca//para o computed monitorar o campo this.busca
+            return this.filtroPorNome()
         }
     }
   }
