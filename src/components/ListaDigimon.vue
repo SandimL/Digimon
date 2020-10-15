@@ -83,7 +83,7 @@ import {BreedingRhombusSpinner} from 'epic-spinners'
     },
     computed: {
         digimonsFiltrados() {
-            this.busca = this.busca//para o computed monitorar o campo this.busca
+            //this.busca = this.busca//para o computed monitorar o campo this.busca
             return this.filtroPorNome()
         }
     }
